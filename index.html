@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1Cr</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f3f5f7;color:#17202a}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer;border:0}
+.app{max-width:480px;margin:auto;min-height:100vh;background:#fff}
+.header{display:flex;align-items:center;justify-content:space-between;padding:15px;background:#111827;color:white}
+.logo{font-size:25px;font-weight:800}
+.icon{background:none;color:white;font-size:23px}
+.page{padding:16px 16px 90px}
+.hidden{display:none!important}
+.card{background:white;border-radius:16px;padding:16px;margin-bottom:14px;box-shadow:0 4px 18px rgba(0,0,0,.07)}
+.hero{background:linear-gradient(135deg,#111827,#334155);color:white;border-radius:18px;padding:22px;margin-bottom:15px}
+h1{font-size:27px;margin-bottom:8px}
+h2{font-size:21px;margin-bottom:10px}
+h3{font-size:17px;margin-bottom:7px}
+p{line-height:1.55}
+.small{font-size:13px;color:#667085}
+.white{color:#dbe2ea;font-size:13px}
+.btn{width:100%;padding:12px 15px;border-radius:11px;font-weight:700;background:#111827;color:white;margin-top:10px}
+.btn.secondary{background:#e9eef5;color:#111827}
+.btn.success{background:#15803d;color:white}
+.btn.danger{background:#b91c1c;color:white}
+.btn.gold{background:#b77900;color:white}
+input,select,textarea{width:100%;padding:12px;border:1px solid #d5d9e0;border-radius:10px;margin:7px 0 12px;background:white}
+textarea{min-height:100px;resize:vertical}
+label{font-size:14px;font-weight:700}
+.auth{min-height:100vh;padding:20px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#111827,#334155)}
+.authbox{background:white;border-radius:20px;padding:22px;width:100%;max-width:430px}
+.center{text-align:center}
+.badge{display:inline-block;padding:6px 10px;border-radius:20px;background:#eef2ff;font-size:12px;font-weight:bold}
+.row{display:flex;gap:10px}.row>*{flex:1}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:#f7f8fa;border-radius:13px;padding:13px}
+.stat strong{display:block;font-size:20px;margin-top:4px}
+.progress{height:10px;background:#e5e7eb;border-radius:20px;overflow:hidden}
+.progress div{height:100%;background:#111827}
+.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:white;border-top:1px solid #ddd;display:flex;justify-content:space-around;padding:9px 4px;z-index:20}
+.bottom button{background:none;color:#475467;font-size:12px}
+.bottom b{display:block;font-size:19px}
+.chat{max-height:430px;overflow:auto;background:#f8fafc;border-radius:13px;padding:8px}
+.msg{padding:10px 12px;border-radius:13px;margin:8px 0;max-width:85%}
+.me{background:#111827;color:white;margin-left:auto}
+.them{background:#e9edf2;color:#111827}
+.work{border:1px solid #e1e5eb;border-radius:13px;padding:13px;margin-top:10px}
+.notice{border-left:4px solid #111827;padding:12px;background:#f7f7f7;border-radius:8px}
+.adminnav{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.adminnav button{padding:15px;border-radius:12px;background:#eef2f5;text-align:left}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:15px;z-index:100}
+.modalbox{background:white;width:100%;max-width:450px;max-height:90vh;overflow:auto;border-radius:18px;padding:18px}
+hr{border:0;border-top:1px solid #eee;margin:14px 0}
+</style>
+</head>
+
+<body>
+
+<!-- AUTH -->
+<div id="auth" class="auth">
+<div class="authbox">
+
+<div class="center">
+<div class="logo" style="color:#111827">1Cr</div>
+<h1 id="authTitle">Welcome To 1Cr</h1>
+<p class="small">Business aur opportunities ka platform</p>
+</div>
+
+<!-- REGISTER -->
+<div id="register">
+<label>Full Name</label>
+<input id="name" placeholder="Full Name">
+
+<label>Mobile Number</label>
+<input id="mobile" type="tel" placeholder="Mobile Number">
+
+<label>Strong Password</label>
+<input id="password" type="password" placeholder="Strong Password">
+
+<label>District</label>
+<input id="district" placeholder="District">
+
+<label>Village</label>
+<input id="village" placeholder="Village">
+
+<label>Age</label>
+<input id="age" type="number" placeholder="Age">
+
+<label>Zone</label>
+<select id="zone">
+<option>Zone 1Cr</option>
+</select>
+
+<button class="btn" onclick="register()">Create Account</button>
+<button class="btn secondary" onclick="showLogin()">Already have account? Login</button>
+</div>
+
+<!-- LOGIN -->
+<div id="login" class="hidden">
+<label>Mobile Number</label>
+<input id="loginMobile" type="tel" placeholder="Mobile Number">
+
+<label>Password</label>
+<input id="loginPassword" type="password" placeholder="Password">
+
+<button class="btn" onclick="login()">Login</button>
+<button class="btn secondary" onclick="showRegister()">Create New Account</button>
+
+<hr>
+
+<button class="btn gold" onclick="showAdminLogin()">Admin Login</button>
+</div>
+
+<!-- ADMIN LOGIN -->
+<div id="adminLogin" class="hidden">
+<h2>👑 Admin Login</h2>
+
+<label>Admin Email</label>
+<input id="adminEmail" type="email" placeholder="Admin Email">
+
+<label>Password</label>
+<input id="adminPass" type="password" placeholder="Password">
+
+<button class="btn" onclick="adminLogin()">Login</button>
+<button class="btn secondary" onclick="showLogin()">Back</button>
+
+<p class="small" style="margin-top:10px">
+Demo only: admin@1cr.local / 123456
+</p>
+</div>
+
+</div>
+</div>
+
+
+<!-- USER APP -->
+<div id="userApp" class="app hidden">
+
+<header class="header">
+<button class="icon" onclick="menu()">☰</button>
+<div class="logo">1Cr</div>
+<button class="icon" onclick="page('profile')">👤</button>
+</header>
+
+<div id="userPage" class="page"></div>
+
+<div class="bottom">
+<button onclick="page('home')"><b>🏠</b>Home</button>
+<button onclick="page('business')"><b>💼</b>Business</button>
+<button onclick="page('work')"><b>🧰</b>Work</button>
+<button onclick="page('profile')"><b>👤</b>Profile</button>
+</div>
+
+</div>
+
+
+<!-- ADMIN APP -->
+<div id="adminApp" class="app hidden">
+
+<header class="header">
+<div class="logo">1Cr ADMIN</div>
+<button class="icon" onclick="adminLogout()">🚪</button>
+</header>
+
+<div id="adminPage" class="page"></div>
+
+</div>
+
+
+<!-- MODAL -->
+<div id="modal" class="modal hidden">
+<div class="modalbox">
+<div id="modalContent"></div>
+<button class="btn secondary" onclick="closeModal()">Close</button>
+</div>
+</div>
+
+
+<script>
+
+/* =========================
+   DEMO DATABASE
+   ========================= */
+
+const KEY="1CR_DATABASE";
+
+let db=JSON.parse(localStorage.getItem(KEY))||{
+users:[],
+donations:[],
+messages:[],
+works:[],
+applications:[],
+notices:[]
+};
+
+let currentUser=null;
+
+
+/* =========================
+   SAVE
+   ========================= */
+
+function save(){
+localStorage.setItem(KEY,JSON.stringify(db));
+}
+
+
+/* =========================
+   AUTH SCREEN
+   ========================= */
+
+function showRegister(){
+register.classList.remove("hidden");
+login.classList.add("hidden");
+adminLogin.classList.add("hidden");
+authTitle.innerText="Welcome To 1Cr";
+}
+
+function showLogin(){
+register.classList.add("hidden");
+login.classList.remove("hidden");
+adminLogin.classList.add("hidden");
+authTitle.innerText="Welcome Back";
+}
+
+function showAdminLogin(){
+register.classList.add("hidden");
+login.classList.add("hidden");
+adminLogin.classList.remove("hidden");
+authTitle.innerText="Admin Login";
+}
+
+
+/* =========================
+   REGISTER
+   ========================= */
+
+function register(){
+
+let n=name.value.trim();
+let m=mobile.value.trim();
+let p=password.value;
+let d=district.value.trim();
+let v=village.value.trim();
+let a=age.value;
+
+if(!n||!m||!p||!d||!v||!a){
+alert("Sabhi details bharna zaroori hai.");
+return;
+}
+
+if(db.users.some(x=>x.mobile===m)){
+alert("Ye mobile number already registered hai.");
+return;
+}
+
+let user={
+id:"U"+Date.now(),
+name:n,
+mobile:m,
+password:p,
+district:d,
+village:v,
+age:a,
+zone:"Zone 1Cr",
+level:1,
+verifiedContribution:0,
+createdAt:new Date().toLocaleString()
+};
+
+db.users.push(user);
+save();
+
+currentUser=user;
+
+alert("Account create ho gaya.");
+openUser();
+}
+
+
+/* =========================
+   LOGIN
+   ========================= */
+
+function login(){
+
+let m=loginMobile.value.trim();
+let p=loginPassword.value;
+
+let user=db.users.find(x=>x.mobile===m&&x.password===p);
+
+if(!user){
+alert("Mobile ya password galat hai.");
+return;
+}
+
+currentUser=user;
+openUser();
+}
+
+
+/* =========================
+   OPEN USER
+   ========================= */
+
+function openUser(){
+auth.classList.add("hidden");
+userApp.classList.remove("hidden");
+page("home");
+}
+
+function logout(){
+currentUser=null;
+userApp.classList.add("hidden");
+auth.classList.remove("hidden");
+showLogin();
+}
+
+
+/* =========================
+   USER PAGES
+   ========================= */
+
+function page(name){
+
+if(name==="home")home();
+if(name==="donate")donate();
+if(name==="business")business();
+if(name==="work")work();
+if(name==="chat")chat();
+if(name==="profile")profile();
+
+}
+
+
+/* =========================
+   HOME
+   ========================= */
+
+function home(){
+
+let msgs=db.messages.filter(x=>x.userId===currentUser.id);
+
+userPage.innerHTML=`
+
+<div class="hero">
+<h1>Welcome, ${safe(currentUser.name)}</h1>
+<p class="white">1Cr par aapka swagat hai.</p>
+<br>
+<span class="badge">Level ${currentUser.level}</span>
+</div>
+
+<div class="row">
+<button class="btn" onclick="page('donate')">💰 Donate</button>
+<button class="btn" onclick="page('chat')">👔 Business Man</button>
+</div>
+
+<div class="card">
+<h2>💼 Business</h2>
+<p class="small">Business opportunities aur information.</p>
+<button class="btn" onclick="page('business')">View Business</button>
+</div>
+
+<div class="card">
+<h2>🧰 Work Business</h2>
+<p class="small">Available work aur business opportunities.</p>
+<button class="btn" onclick="page('work')">View Work</button>
+</div>
+
+<div class="card">
+<h2>⭐ Your Level</h2>
+<h1>Level ${currentUser.level}</h1>
+<div class="progress">
+<div style="width:${Math.min(currentUser.level*10,100)}%"></div>
+</div>
+</div>
+
+${notice()}
+
+<div class="card">
+<h2>🇮🇳 हमारा उद्देश्य</h2>
+<p><b>1Cr सिर्फ एक Platform नहीं है, यह एक सोच है।</b></p>
+<p style="margin-top:8px">
+हमारा उद्देश्य मेहनती, समझदार और हुनरमंद युवाओं को
+सही मार्गदर्शन और अवसर देकर Business की दुनिया में
+आगे बढ़ने में मदद करना है।
+</p>
+<p style="margin-top:8px">
+<b>1Cr — सोच से Business तक।</b>
+</p>
+</div>
+`;
+}
+
+function notice(){
+
+if(!db.notices.length)return "";
+
+let n=db.notices[db.notices.length-1];
+
+return `
+<div class="card">
+<h2>📢 Latest Notice</h2>
+<div class="notice">
+<h3>${safe(n.title)}</h3>
+<p>${safe(n.text)}</p>
+<p class="small">${n.date}</p>
+</div>
+</div>
+`;
+}
+
+
+/* =========================
+   DONATE
+   ========================= */
+
+function donate(){
+
+let total=db.donations
+.filter(x=>x.status==="verified")
+.reduce((a,b)=>a+Number(b.amount),0);
+
+let mine=db.donations
+.filter(x=>x.userId===currentUser.id&&x.status==="verified")
+.reduce((a,b)=>a+Number(b.amount),0);
+
+let percent=Math.min(total/100000,100);
+
+userPage.innerHTML=`
+
+<div class="card">
+
+<h2>💰 1Cr Business Fund</h2>
+
+<p>
+आपके सहयोग से 1Cr का Business Fund तैयार किया जा रहा है।
+Payment submit करने के बाद UTR verification किया जाएगा।
+</p>
+
+<hr>
+
+<h3>📲 UPI</h3>
+
+<h2>7260957661-2@ybl</h2>
+
+<button class="btn" onclick="copyUPI()">Copy UPI</button>
+
+<hr>
+
+<h3>अभी तक Verified Collection</h3>
+<h1>₹${total.toLocaleString("en-IN")}</h1>
+
+<p class="small">Target: ₹1,00,00,000</p>
+
+<div class="progress">
+<div style="width:${percent}%"></div>
+</div>
+
+<hr>
+
+<h3>आपका Verified Contribution</h3>
+<h2>₹${mine.toLocaleString("en-IN")}</h2>
+
+<button class="btn" onclick="utrForm()">
+Payment ke baad UTR Submit Karein
+</button>
+
+</div>
+
+<div class="card">
+<h2>⭐ Level 5+ Business Opportunity</h2>
+<p>
+Level 5+ users business opportunity ke liye application
+submit kar sakte hain. Approval aur applicable terms ke
+according process hoga.
+</p>
+<button class="btn" onclick="page('business')">Business Details</button>
+</div>
+
+<button class="btn secondary" onclick="page('home')">← Home</button>
+`;
+}
+
+function copyUPI(){
+navigator.clipboard?.writeText("7260957661-2@ybl");
+alert("UPI copied.");
+}
+
+function utrForm(){
+
+openModal(`
+
+<h2>💰 Payment Verification</h2>
+
+<p class="small">
+Payment ke baad amount aur UTR number submit karein.
+Admin verification ke baad hi amount verified hoga.
+</p>
+
+<label>Amount</label>
+<input id="amount" type="number" placeholder="Amount">
+
+<label>UTR / Transaction Number</label>
+<input id="utr" placeholder="UTR Number">
+
+<button class="btn" onclick="submitUTR()">Submit</button>
+`);
+}
+
+function submitUTR(){
+
+let a=Number(document.getElementById("amount").value);
+let u=document.getElementById("utr").value.trim();
+
+if(!a||!u){
+alert("Amount aur UTR bharna zaroori hai.");
+return;
+}
+
+db.donations.push({
+id:"D"+Date.now(),
+userId:currentUser.id,
+userName:currentUser.name,
+amount:a,
+utr:u,
+status:"pending",
+date:new Date().toLocaleString()
+});
+
+save();
+closeModal();
+
+alert("Payment details submit ho gayi. Admin verification ke baad update hoga.");
+donate();
+}
+
+
+/* =========================
+   BUSINESS
+   ========================= */
+
+function business(){
+
+let apps=db.applications.filter(x=>x.userId===currentUser.id);
+
+userPage.innerHTML=`
+
+<div class="card">
+<h2>💼 Business</h2>
+<p class="small">Available business opportunities.</p>
+</div>
+
+<div class="card">
+<h3>⭐ Level 5+ Business Opportunity</h3>
+<p>
+Level 5+ users eligible business opportunities ke liye
+application submit kar sakte hain.
+</p>
+<button class="btn" onclick="applicationForm()">Apply for Business</button>
+</div>
+
+<div class="card">
+<h3>📋 My Applications</h3>
+
+${
+apps.length?
+apps.map(a=>`
+<div class="work">
+<b>${safe(a.business)}</b>
+<p>Amount: ₹${Number(a.amount).toLocaleString("en-IN")}</p>
+<p>Status: <b>${safe(a.status)}</b></p>
+</div>
+`).join("")
+:
+`<p class="small">Abhi application nahi hai.</p>`
+}
+
+</div>
+`;
+}
+
+function applicationForm(){
+
+openModal(`
+
+<h2>Business Application</h2>
+
+<label>Business Name</label>
+<input id="bn" placeholder="Business name">
+
+<label>Required Amount</label>
+<input id="ba" type="number" placeholder="₹ Amount">
+
+<label>Location</label>
+<input id="bl" placeholder="Location">
+
+<label>Business Plan</label>
+<textarea id="bp" placeholder="Business plan"></textarea>
+
+<button class="btn" onclick="submitApplication()">Submit</button>
+`);
+}
+
+function submitApplication(){
+
+let b=document.getElementById("bn").value.trim();
+let a=Number(document.getElementById("ba").value);
+let l=document.getElementById("bl").value.trim();
+let p=document.getElementById("bp").value.trim();
+
+if(!b||!a||!l||!p){
+alert("Sabhi details bharna zaroori hai.");
+return;
+}
+
+db.applications.push({
+id:"A"+Date.now(),
+userId:currentUser.id,
+userName:currentUser.name,
+business:b,
+amount:a,
+location:l,
+plan:p,
+status:"pending",
+date:new Date().toLocaleString()
+});
+
+save();
+closeModal();
+
+alert("Application submit ho gayi.");
+business();
+}
+
+
+/* =========================
+   WORK
+   ========================= */
+
+function work(){
+
+let works=db.works.filter(x=>x.published);
+
+userPage.innerHTML=`
+
+<div class="card">
+<h2>🧰 Work Business</h2>
+<p class="small">
+Admin dwara published work/business.
+</p>
+</div>
+
+${
+works.length?
+works.map(w=>`
+<div class="card">
+<h3>${safe(w.title)}</h3>
+<p>${safe(w.description)}</p>
+
+<p class="small"><b>Type:</b> ${safe(w.type)}</p>
+<p class="small"><b>Skills:</b> ${safe(w.requirements)}</p>
+<p class="small"><b>Payment/Terms:</b> ${safe(w.payment)}</p>
+</div>
+`).join("")
+:
+`<div class="card"><p>Abhi koi Work Business available nahi hai.</p></div>`
+}
+`;
+}
+
+
+/* =========================
+   CHAT
+   ========================= */
+
+function chat(){
+
+let msgs=db.messages.filter(x=>x.userId===currentUser.id);
+
+userPage.innerHTML=`
+
+<div class="card">
+<h2>👔 Business Man</h2>
+<p class="small">Business related message bhejein.</p>
+
+<div class="chat">
+
+${
+msgs.length?
+msgs.map(m=>`
+<div class="msg ${m.sender==="user"?"me":"them"}">
+${safe(m.text)}
+<div style="font-size:10px;margin-top:4px">${m.date}</div>
+</div>
+`).join("")
+:
+`<p class="small center">Abhi koi message nahi hai.</p>`
+}
+
+</div>
+
+<textarea id="message" placeholder="Apna message likhein..."></textarea>
+
+<button class="btn" onclick="sendMessage()">Send ➤</button>
+
+</div>
+`;
+}
+
+function sendMessage(){
+
+let text=document.getElementById("message").value.trim();
+
+if(!text){
+alert("Message likhein.");
+return;
+}
+
+db.messages.push({
+id:"M"+Date.now(),
+userId:currentUser.id,
+userName:currentUser.name,
+sender:"user",
+text,
+date:new Date().toLocaleString(),
+timeStamp:Date.now(),
+read:false
+});
+
+save();
+chat();
+}
+
+
+/* =========================
+   PROFILE
+   ========================= */
+
+function profile(){
+
+let total=db.donations
+.filter(x=>x.userId===currentUser.id&&x.status==="verified")
+.reduce((a,b)=>a+Number(b.amount),0);
+
+userPage.innerHTML=`
+
+<div class="card">
+
+<h2>👤 My Profile</h2>
+
+<p><b>Name:</b> ${safe(currentUser.name)}</p>
+<p><b>Mobile:</b> ${safe(currentUser.mobile)}</p>
+<p><b>District:</b> ${safe(currentUser.district)}</p>
+<p><b>Village:</b> ${safe(currentUser.village)}</p>
+<p><b>Age:</b> ${safe(currentUser.age)}</p>
+<p><b>Zone:</b> ${safe(currentUser.zone)}</p>
+<p><b>Level:</b> ${currentUser.level}</p>
+
+<hr>
+
+<h3>Total Verified Contribution</h3>
+<h2>₹${total.toLocaleString("en-IN")}</h2>
+
+<button class="btn danger" onclick="logout()">Logout</button>
+
+</div>
+`;
+}
+
+
+/* =========================
+   MENU
+   ========================= */
+
+function menu(){
+
+openModal(`
+
+<h2>☰ Menu</h2>
+
+<button class="btn" onclick="closeModal();page('home')">🏠 Home</button>
+<button class="btn" onclick="closeModal();page('donate')">💰 Donate</button>
+<button class="btn" onclick="closeModal();page('business')">💼 Business</button>
+<button class="btn" onclick="closeModal();page('work')">🧰 Work Business</button>
+<button class="btn" onclick="closeModal();page('chat')">👔 Business Man</button>
+<button class="btn" onclick="closeModal();page('profile')">👤 Profile</button>
+<button class="btn danger" onclick="closeModal();logout()">Logout</button>
+
+`);
+}
+
+
+/* =========================
+   ADMIN LOGIN
+   ========================= */
+
+function adminLogin(){
+
+let e=adminEmail.value.trim();
+let p=adminPass.value;
+
+if(e==="admin@1cr.local"&&p==="123456"){
+
+auth.classList.add("hidden");
+adminApp.classList.remove("hidden");
+
+adminHome();
+
+}else{
+alert("Admin email ya password galat hai.");
+}
+}
+
+function adminLogout(){
+
+adminApp.classList.add("hidden");
+auth.classList.remove("hidden");
+
+showLogin();
+}
+
+
+/* =========================
+   ADMIN HOME
+   ========================= */
+
+function adminHome(){
+
+let total=db.donations
+.filter(x=>x.status==="verified")
+.reduce((a,b)=>a+Number(b.amount),0);
+
+let pending=db.donations.filter(x=>x.status==="pending").length;
+
+let unread=db.messages.filter(x=>x.sender==="user"&&!x.read).length;
+
+adminPage.innerHTML=`
+
+<h2>📊 Admin Dashboard</h2>
+
+<div class="stats">
+
+<div class="stat">👥 Users<strong>${db.users.length}</strong></div>
+
+<div class="stat">💰 Verified Fund<strong>₹${total.toLocaleString("en-IN")}</strong></div>
+
+<div class="stat">⏳ Pending UTR<strong>${pending}</strong></div>
+
+<div class="stat">💬 New Messages<strong>${unread}</strong></div>
+
+<div class="stat">💼 Active Work<strong>${db.works.filter(x=>x.published).length}</strong></div>
+
+<div class="stat">⭐ Applications<strong>${db.applications.length}</strong></div>
+
+</div>
+
+<div class="card">
+<h2>👑 Control Panel</h2>
+
+<div class="adminnav">
+
+<button onclick="adminUsers()">👥<br><b>Users</b></button>
+<button onclick="adminDonations()">💰<br><b>Donations</b></button>
+<button onclick="adminChats()">💬<br><b>Business Man</b></button>
+<button onclick="adminWorks()">💼<br><b>Work Business</b></button>
+<button onclick="adminApps()">⭐<br><b>Applications</b></button>
+<button onclick="adminNotices()">📢<br><b>Notices</b></button>
+
+</div>
+</div>
+`;
+}
+
+
+/* =========================
+   ADMIN USERS
+   ========================= */
+
+function backAdmin(){
+adminHome();
+}
+
+function adminUsers(){
+
+adminPage.innerHTML=`
+
+<button class="btn secondary" onclick="backAdmin()">← Dashboard</button>
+
+<h2 style="margin-top:15px">👥 Users</h2>
+
+${
+db.users.length?
+db.users.map(u=>`
+<div class="card">
+<h3>${safe(u.name)}</h3>
+<p>Mobile: ${safe(u.mobile)}</p>
+<p>District: ${safe(u.district)}</p>
+<p>Village: ${safe(u.village)}</p>
+<p>Age: ${safe(u.age)}</p>
+<p>Level: ${u.level}</p>
+<p>Verified Contribution:
+₹${Number(u.verifiedContribution||0).toLocaleString("en-IN")}
+</p>
+<p class="small">${u.createdAt}</p>
+</div>
+`).join("")
+:
+`<div class="card">No users.</div>`
+}
+`;
+}
+
+
+/* =========================
+   ADMIN DONATIONS
+   ========================= */
+
+function adminDonations(){
+
+adminPage.innerHTML=`
+
+<button class="btn secondary" onclick="backAdmin()">← Dashboard</button>
+
+<h2 style="margin-top:15px">💰 Donations</h2>
+
+${
+db.donations.length?
+db.donations.slice().reverse().map(d=>`
+
+<div class="card">
+
+<h3>${safe(d.userName)}</h3>
+
+<p><b>Amount:</b> ₹${Number(d.amount).toLocaleString("en-IN")}</p>
+<p><b>UTR:</b> ${safe(d.utr)}</p>
+<p><b>Status:</b> ${safe(d.status)}</p>
+<p class="small">${d.date}</p>
+
+${
+d.status==="pending"?
+`
+<div class="row">
+
+<button class="btn success" onclick="verifyDonation('${d.id}')">
+Verify
+</button>
+
+<button class="btn danger" onclick="rejectDonation('${d.id}')">
+Reject
+</button>
+
+</div>
+`
+:""
+}
+
+</div>
+
+`).join("")
+:
+`<div class="card">No donation submissions.</div>`
+}
+`;
+}
+
+function verifyDonation(id){
+
+let d=db.donations.find(x=>x.id===id);
+
+if(!d)return;
+
+d.status="verified";
+
+let u=db.users.find(x=>x.id===d.userId);
+
+if(u){
+
+u.verifiedContribution=db.donations
+.filter(x=>x.userId===u.id&&x.status==="verified")
+.reduce((a,b)=>a+Number(b.amount),0);
+
+}
+
+save();
+
+alert("Donation verified.");
+adminDonations();
+}
+
+function rejectDonation(id){
+
+let d=db.donations.find(x=>x.id===id);
+
+if(!d)return;
+
+d.status="rejected";
+
+save();
+
+adminDonations();
+}
+
+
+/* =========================
+   ADMIN CHAT
+   ========================= */
+
+function adminChats(){
+
+let users=[...new Map(db.messages.map(x=>[x.userId,x.userName]))];
+
+adminPage.innerHTML=`
+
+<button class="btn secondary" onclick="backAdmin()">← Dashboard</button>
+
+<h2 style="margin-top:15px">💬 Business Man Chats</h2>
+
+${
+users.length?
+users.map(x=>`
+
+<div class="card">
+<h3>${safe(x[1])}</h3>
+
+<button class="btn" onclick="openAdminChat('${x[0]}')">
+Open Chat
+</button>
+</div>
+
+`).join("")
+:
+`<div class="card">No chats.</div>`
+}
+`;
+}
+
+function openAdminChat(uid){
+
+let user=db.users.find(x=>x.id===uid);
+
+let msgs=db.messages
+.filter(x=>x.userId===uid)
+.sort((a,b)=>a.timeStamp-b.timeStamp);
+
+db.messages
+.filter(x=>x.userId===uid&&x.sender==="user")
+.forEach(x=>x.read=true);
+
+save();
+
+adminPage.innerHTML=`
+
+<button class="btn secondary" onclick="adminChats()">← Chats</button>
+
+<div class="card" style="margin-top:12px">
+
+<h2>💬 ${safe(user?.name||"User")}</h2>
+
+<div class="chat">
+
+${
+msgs.map(m=>`
+
+<div class="msg ${m.sender==="admin"?"them":"me"}">
+
+${safe(m.text)}
+
+<div class="small">${m.date}</div>
+
+${
+m.sender==="admin"?
+`
+<button class="btn secondary" onclick="editMsg('${m.id}','${uid}')">
+Edit
+</button>
+`
+:""
+}
+
+<button class="btn danger" onclick="deleteMsg('${m.id}','${uid}')">
+Delete
+</button>
+
+</div>
+
+`).join("")
+}
+
+</div>
+
+<textarea id="adminReply" placeholder="Reply likhein..."></textarea>
+
+<button class="btn" onclick="reply('${uid}')">Reply ➤</button>
+
+</div>
+`;
+}
+
+function reply(uid){
+
+let text=document.getElementById("adminReply").value.trim();
+
+if(!text)return;
+
+db.messages.push({
+id:"M"+Date.now(),
+userId:uid,
+sender:"admin",
+text,
+date:new Date().toLocaleString(),
+timeStamp:Date.now(),
+read:false
+});
+
+save();
+openAdminChat(uid);
+}
+
+function editMsg(id,uid){
+
+let m=db.messages.find(x=>x.id===id);
+
+if(!m)return;
+
+openModal(`
+
+<h2>Edit Message</h2>
+
+<textarea id="edit">${safe(m.text)}</textarea>
+
+<button class="btn" onclick="saveMsg('${id}','${uid}')">
+Save
+</button>
+
+`);
+}
+
+function saveMsg(id,uid){
+
+let m=db.messages.find(x=>x.id===id);
+
+if(!m)return;
+
+m.text=document.getElementById("edit").value.trim();
+
+save();
+closeModal();
+openAdminChat(uid);
+}
+
+function deleteMsg(id,uid){
+
+if(!confirm("Message delete karein?"))return;
+
+db.messages=db.messages.filter(x=>x.id!==id);
+
+save();
+openAdminChat(uid);
+}
+
+
+/* =========================
+   ADMIN WORK
+   ========================= */
+
+function adminWorks(){
+
+adminPage.innerHTML=`
+
+<button class="btn secondary" onclick="backAdmin()">← Dashboard</button>
+
+<h2 style="margin-top:15px">💼 Work Business</h2>
+
+<div class="card">
+
+<h3>Add Work Business</h3>
+
+<label>Work / Business Name</label>
+<input id="wt" placeholder="Work name">
+
+<label>Description</label>
+<textarea id="wd"></textarea>
+
+<label>Type</label>
+<input id="wtype" placeholder="Online / Offline">
+
+<label>Required Skills</label>
+<input id="wr" placeholder="Required skills">
+
+<label>Payment / Terms</label>
+<input id="wp" placeholder="Payment / Terms">
+
+<button class="btn" onclick="addWork()">Publish Work</button>
+
+</div>
+
+${
+db.works.map(w=>`
+
+<div class="card">
+
+<h3>${safe(w.title)}</h3>
+<p>${safe(w.description)}</p>
+
+<p class="small">
+Status: <b>${w.published?"Published":"Hidden"}</b>
+</p>
+
+<button class="btn secondary" onclick="toggleWork('${w.id}')">
+${w.published?"Hide":"Publish"}
+</button>
+
+<button class="btn danger" onclick="deleteWork('${w.id}')">
+Delete
+</button>
+
+</div>
+
+`).join("")
+}
+`;
+}
+
+function addWork(){
+
+let t=wt.value.trim();
+let d=wd.value.trim();
+let ty=wtype.value.trim();
+let r=wr.value.trim();
+let p=wp.value.trim();
+
+if(!t||!d){
+alert("Work name aur description bharna zaroori hai.");
+return;
+}
+
+db.works.push({
+id:"W"+Date.now(),
+title:t,
+description:d,
+type:ty,
+requirements:r,
+payment:p,
+published:true,
+date:new Date().toLocaleString()
+});
+
+save();
+
+alert("Work publish ho gaya.");
+adminWorks();
+}
+
+function toggleWork(id){
+
+let w=db.works.find(x=>x.id===id);
+
+if(!w)return;
+
+w.published=!w.published;
+
+save();
+adminWorks();
+}
+
+function deleteWork(id){
+
+if(!confirm("Work delete karein?"))return;
+
+db.works=db.works.filter(x=>x.id!==id);
+
+save();
+adminWorks();
+}
+
+
+/* =========================
+   ADMIN APPLICATIONS
+   ========================= */
+
+function adminApps(){
+
+adminPage.innerHTML=`
+
+<button class="btn secondary" onclick="backAdmin()">← Dashboard</button>
+
+<h2 style="margin-top:15px">⭐ Business Applications</h2>
+
+${
+db.applications.length?
+db.applications.slice().reverse().map(a=>`
+
+<div class="card">
+
+<h3>${safe(a.userName)}</h3>
+
+<p><b>Business:</b> ${safe(a.business)}</p>
+<p><b>Amount:</b> ₹${Number(a.amount).toLocaleString("en-IN")}</p>
+<p><b>Location:</b> ${safe(a.location)}</p>
+<p><b>Plan:</b> ${safe(a.plan)}</p>
+<p><b>Status:</b> ${safe(a.status)}</p>
+
+<div class="row">
+
+<button class="btn success"
+onclick="applicationStatus('${a.id}','approved')">
+Approve
+</button>
+
+<button class="btn danger"
+onclick="applicationStatus('${a.id}','rejected')">
+Reject
+</button>
+
+</div>
+
+</div>
+
+`).join("")
+:
+`<div class="card">No applications.</div>`
+}
+`;
+}
+
+function applicationStatus(id,status){
+
+let a=db.applications.find(x=>x.id===id);
+
+if(!a)return;
+
+a.status=status;
+
+save();
+adminApps();
+}
+
+
+/* =========================
+   ADMIN NOTICES
+   ========================= */
+
+function adminNotices(){
+
+adminPage.innerHTML=`
+
+<button class="btn secondary" onclick="backAdmin()">← Dashboard</button>
+
+<h2 style="margin-top:15px">📢 Notices</h2>
+
+<div class="card">
+
+<label>Notice Title</label>
+<input id="nt" placeholder="Important Update">
+
+<label>Message</label>
+<textarea id="nm" placeholder="Notice message"></textarea>
+
+<button class="btn" onclick="addNotice()">Publish Notice</button>
+
+</div>
+
+${
+db.notices.slice().reverse().map(n=>`
+
+<div class="card">
+
+<h3>${safe(n.title)}</h3>
+<p>${safe(n.text)}</p>
+<p class="small">${n.date}</p>
+
+<button class="btn danger" onclick="deleteNotice('${n.id}')">
+Delete
+</button>
+
+</div>
+
+`).join("")
+}
+`;
+}
+
+function addNotice(){
+
+let t=nt.value.trim();
+let m=nm.value.trim();
+
+if(!t||!m){
+alert("Title aur message bharna zaroori hai.");
+return;
+}
+
+db.notices.push({
+id:"N"+Date.now(),
+title:t,
+text:m,
+date:new Date().toLocaleString()
+});
+
+save();
+
+alert("Notice publish ho gaya.");
+adminNotices();
+}
+
+function deleteNotice(id){
+
+db.notices=db.notices.filter(x=>x.id!==id);
+
+save();
+adminNotices();
+}
+
+
+/* =========================
+   MODAL
+   ========================= */
+
+function openModal(html){
+modalContent.innerHTML=html;
+modal.classList.remove("hidden");
+}
+
+function closeModal(){
+modal.classList.add("hidden");
+modalContent.innerHTML="";
+}
+
+
+/* =========================
+   HTML SAFETY
+   ========================= */
+
+function safe(x){
+
+return String(x??"")
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
+
+}
+
+
+/* START */
+showRegister();
+
+</script>
+
+</body>
+</html>
